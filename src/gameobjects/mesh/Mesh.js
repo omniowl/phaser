@@ -549,14 +549,16 @@ var Mesh = new Class({
     addVerticesFromObj: function (key, scale, x, y, z, rotateX, rotateY, rotateZ, zIsUp)
     {
         var data = this.scene.sys.cache.obj.get(key);
+        var parsedData;
 
         if (data)
         {
-            GenerateObjVerts(data, this, scale, x, y, z, rotateX, rotateY, rotateZ, zIsUp);
-        } 
-        else
+            parsedData = GenerateObjVerts(data, this, scale, x, y, z, rotateX, rotateY, rotateZ, zIsUp);
+        }
+
+        if (!parsedData || parsedData.verts.length === 0)
         {
-            console.warn(`Could not generate valid vertices for: ${key}`);
+            console.warn('Mesh.addVerticesFromObj data empty:', key);
         }
 
         return this;
@@ -723,6 +725,10 @@ var Mesh = new Class({
         else 
         {
             console.warn('Could not generate valid vertices.');
+        }
+        else
+        {
+            console.warn('Mesh.addVertices data empty or invalid');
         }
 
         this.dirtyCache[9] = -1;
